@@ -1,0 +1,76 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-battery-status": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-media-capture": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-contacts": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-device-motion": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-device-orientation": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-media": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-vibration": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        }
+    }
+}
