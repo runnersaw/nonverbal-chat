@@ -43,23 +43,13 @@
 </head>
 
 <body>
-    <canvas id="canvas" style="width:100%;height:100%;" style="border:1px solid #000000;">
+    <p id="message">Message</p>
+    <canvas id="canvas" width="300px" height="300px" style="border:1px solid #000000;">
         Sorry, your browser doesn't support the canvas element.
     </canvas>
-    <div class="app">
-        Test: <input id="input-text" type="text" name="test">
-        <p id="message"></p>
-        <h1>Space Chat</h1>
-        <div id="deviceready" class="blink">
-            <p class="event listening">Connecting to Device</p>
-            <p class="event received">Let's chat</p>
-        </div>
-    </div>
+    <input id="input-text" type="text" name="test">
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
-    <script type="text/javascript">
-        app.initialize();
-    </script>
     <script type="text/javascript" src="js/touch-recognizer.js"></script>
 </body>
 
