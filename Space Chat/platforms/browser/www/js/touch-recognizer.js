@@ -13,30 +13,29 @@ function handleEnd(evt) {
 }
 
 function touchEnded(x, y) {
-	var input = document.getElementById("input-text");
-	input.style.position = "absolute";
-	input.style.left = (x)+'px';
-	input.style.top = (y)+'px';
-	input.style.display='block';
+	var input = $("#input-text");
+	input.css({
+		'position': 'absolute',
+		'left': x+'px',
+		'top': y+'px'
+	});
+	input.show();
 	input.focus();
 }
 
-var input = document.getElementById("input-text");
-input.style.display='none';
-input.addEventListener("keydown", function (evt) {
+var input = $("#input-text");
+input.hide();
+input.keydown(function (evt) {
     if (evt.keyCode === 13) {  //checks whether the pressed key is "Enter"
         enteredText(input);
     }
 });
 
 function enteredText(input) {
-	var rect = input.getBoundingClientRect();
-	var fontSize = window.getComputedStyle(input).fontSize;
-	log(rect);
-	drawText(input.value, rect.left, rect.bottom, fontSize);
+	drawText(input.val(), input.position().left, input.position().top + input.height(), input.css('font-size'));
 
-	input.style.display='none';
-	input.value = '';
+	input.hide();
+	input.val('');
 }
 
 function drawText(text, x, y, fontSize) {

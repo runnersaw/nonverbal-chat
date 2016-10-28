@@ -36,18 +36,19 @@
         * Enable eval(): add 'unsafe-eval' to default-src
     * Create your own at http://cspisawesome.com
     -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *;script-src 'self' * 'unsafe-inline' 'unsafe-eval';" />
 
     <link rel="stylesheet" type="text/css" href="css/index.css" />
     <title>Space Chat</title>
 </head>
 
 <body>
-    <p id="message">Message</p>
     <canvas id="canvas" width="300px" height="300px" style="border:1px solid #000000;">
         Sorry, your browser doesn't support the canvas element.
     </canvas>
+    <p id="message">Message</p>
     <input id="input-text" type="text" name="test">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript" src="js/touch-recognizer.js"></script>
