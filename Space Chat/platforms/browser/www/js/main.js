@@ -6,6 +6,7 @@ var Modes = {
 
 var Session = function() {
 	this.mode = Modes.NONE;
+	this.currentColor = '#000000';
 };
 
 Session.Modes = Modes;
@@ -51,8 +52,8 @@ function enteredText(input) {
 function drawText(text, x, y, fontSize) {
 	var c = document.getElementById("canvas");
 	var ctx = c.getContext("2d");
-	ctx.font = fontSize+" sans-serif";
-	ctx.fillStyle = 'blue'; // use current_color
+	ctx.font = fontSize+" verdana";
+	ctx.fillStyle = session.currentColor;
 	ctx.fillText(text,x,y);
 }
 
@@ -60,6 +61,36 @@ function log(x) {
 	console.log(x);
 	var message = document.getElementById('message');
 	message.innerHTML = x;
+}
+
+function colorBlue() {
+	$(".color-button").css({
+		'border': '1px solid #000000'
+	})
+	var input = $("#blue-button");
+	input.css({
+		'border': '5px solid #0000FF'
+	});
+	var output = $("#input-text");
+	output.css({
+		color: '#0000FF'
+	})
+	session.currentColor = '#0000FF';
+}
+
+function colorRed() {
+	$(".color-button").css({
+		'border': '1px solid #000000'
+	})
+	var input = $("#red-button");
+	input.css({
+		'border': '5px solid #FF0000'
+	});
+	var output = $("#input-text");
+	output.css({
+		color: '#FF0000'
+	})
+	session.currentColor = '#FF0000';
 }
 
 $(document).ready(function() {
@@ -80,6 +111,12 @@ $(document).ready(function() {
 	input.focus(function() {
 		log('focused');
 	});
+
+	var blue_button = $('#blue-button');
+	blue_button.click(colorBlue);
+
+	var red_button = $('#red-button');
+	red_button.click(colorRed);
 
 	var textModeButton = $('#text-mode-button');
 	log(textModeButton);
