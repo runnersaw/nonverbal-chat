@@ -18,6 +18,7 @@
  */
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+    font-family: verdana;
 }
 
 body {
@@ -102,14 +103,31 @@ h1 {
     50% { opacity: 0.4; }
     to { opacity: 1.0; }
 }
- 
+
 @-webkit-keyframes fade {
     from { opacity: 1.0; }
     50% { opacity: 0.4; }
     to { opacity: 1.0; }
 }
- 
+
 .blink {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
+
+#footer {
+    width: 100%;
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    height: 40px;
+    margin: auto;
+    overflow: hidden;
+    background:#2E2E2E;
+    text-align:center;
+    line-height: 15px;
+    color: #fff;
+    border-top:1px solid #444;
+}
+
+
