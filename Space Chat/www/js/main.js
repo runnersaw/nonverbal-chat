@@ -23,7 +23,7 @@ function handleEnd(evt) {
 
 function touchEnded(x, y) {
 	log('hello');
-	if (session.mode == Session.Modes.TEXT) {
+	if (session.mode == Session.Modes.TEXT || session.mode == Session.Modes.NONE) { // Default to text box
 		log('hi');
 		var input = $("#input-text");
 		input.css({
@@ -63,38 +63,29 @@ function log(x) {
 	message.innerHTML = x;
 }
 
-function colorBlue() {
-	$(".color-button").css({
-		'border': '1px solid #000000'
-	})
-	var input = $("#blue-button");
-	input.css({
-		'border': '5px solid #0000FF'
-	});
-	var output = $("#input-text");
-	output.css({
-		color: '#0000FF'
-	})
-	session.currentColor = '#0000FF';
+function getColorForButtonText(text) {
+	if (text === 'Red') {
+		return '#FF0000';
+	} else if (text === 'Blue') {
+		return '#0000FF';
+	}
 }
 
-function colorRed() {
+function setColor(color, button) {
 	$(".color-button").css({
 		'border': '1px solid #000000'
 	})
-	var input = $("#red-button");
-	input.css({
-		'border': '5px solid #FF0000'
+	button.css({
+		'border': '5px solid '+color
 	});
 	var output = $("#input-text");
 	output.css({
-		color: '#FF0000'
+		color: color
 	})
-	session.currentColor = '#FF0000';
+	session.currentColor = color;
 }
 
 $(document).ready(function() {
-
 	var canvas = $("#canvas");
 
 	canvas.on('touchstart', handleEnd);
@@ -112,24 +103,23 @@ $(document).ready(function() {
 		log('focused');
 	});
 
-	var blue_button = $('#blue-button');
-	blue_button.click(colorBlue);
+	var color_buttons = $('.color-button');
+	color_buttons.click(function(evt) {
+		var button = $(evt.currentTarget);
+		var color = getColorForButtonText(evt.currentTarget.innerHTML);
+		setColor(color, button);
+	});
 
-	var red_button = $('#red-button');
-	red_button.click(colorRed);
+	// Set the default color to red
+	setColor('#FF0000', $('#red-button'));
 
 	var textModeButton = $('#text-mode-button');
-	log(textModeButton);
-	log(session);
 	textModeButton.click(function(evt) {
-		log(session);
 		session.mode = Session.Modes.TEXT;
-		log('in text mode');
 		textModeButton.css({
 			'background-color': 'green'
 		});
 	});
-	log(textModeButton);
 });
 
 
