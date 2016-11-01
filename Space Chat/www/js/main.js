@@ -7,6 +7,7 @@ var Modes = {
 var Session = function() {
 	this.mode = Modes.NONE;
 	this.currentColor = '#000000';
+	this.currentSelectedQuickChat = undefined;
 };
 
 Session.Modes = Modes;
@@ -85,6 +86,28 @@ function setColor(color, button) {
 	session.currentColor = color;
 }
 
+function quickChatButtonPressed(evt) {
+	session.currentSelectedQuickChat = evt.currentTarget;
+	updateCurrentQuickChatIcon();
+}
+
+function updateCurrentQuickChatIcon() {
+	var quickChatButtons = $('.quick-chat-button');
+	for (var i=0; i<quickChatButtons.length; i++) {
+		var button = quickChatButtons[i];
+		log(button);
+		if (session.currentSelectedQuickChat == button) {
+			$(button).css({
+				'background-color': 'green'
+			});
+		} else {
+			$(button).css({
+				'background-color': 'gray'
+			});
+		}
+	}
+}
+
 $(document).ready(function() {
 	var canvas = $("#canvas");
 
@@ -120,6 +143,9 @@ $(document).ready(function() {
 			'background-color': 'green'
 		});
 	});
+
+	var quickChatButtons = $('.quick-chat-button');
+	quickChatButtons.click(quickChatButtonPressed);
 });
 
 
