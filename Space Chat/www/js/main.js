@@ -1,7 +1,8 @@
 
 var Modes = {
 	TEXT: {name: 'Text'},
-	NONE: {name: 'None'}
+	NONE: {name: 'None'},
+	QUICK_CHAT: {name: 'QuickChat'}
 };
 
 var Session = function() {
@@ -35,6 +36,12 @@ function touchEnded(x, y) {
 		input.show();
 		input.focus();
 	}
+	else if (session.mode == Session.Modes.QUICK_CHAT) {
+		drawText(session.currentSelectedQuickChat.innerHTML, x, y, '30px');
+		session.mode = Session.Modes.NONE;
+		session.currentSelectedQuickChat = undefined;
+		updateCurrentQuickChatIcon();
+	}
 }
 
 function enteredText(input) {
@@ -53,7 +60,7 @@ function enteredText(input) {
 function drawText(text, x, y, fontSize) {
 	var c = document.getElementById("canvas");
 	var ctx = c.getContext("2d");
-	ctx.font = fontSize+" verdana";
+	ctx.font = fontSize+" Verdana";
 	ctx.fillStyle = session.currentColor;
 	ctx.fillText(text,x,y);
 }
@@ -88,6 +95,7 @@ function setColor(color, button) {
 
 function quickChatButtonPressed(evt) {
 	session.currentSelectedQuickChat = evt.currentTarget;
+	session.mode = Session.Modes.QUICK_CHAT;
 	updateCurrentQuickChatIcon();
 }
 
