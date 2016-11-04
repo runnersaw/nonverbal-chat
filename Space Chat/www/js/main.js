@@ -110,7 +110,7 @@ function updateCurrentQuickChatIcon() {
 			});
 		} else {
 			$(button).css({
-				'background-color': 'gray'
+				'background-color': 'white'
 			});
 		}
 	}

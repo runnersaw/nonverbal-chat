@@ -19,7 +19,8 @@
     * Create your own at http://cspisawesome.com
     -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; media-src *; script-src 'self' 'unsafe-inline' https://ajax.googleapis.com/;" />
-
+    <link rel="stylesheet" type="text/css" href="css/skeleton.css" />
+    <link rel="stylesheet" type="text/css" href="css/normalize.css" />
     <link rel="stylesheet" type="text/css" href="css/index.css" />
     <title>Space Chat</title>
 </head>
@@ -31,14 +32,13 @@
         <button class="quick-chat-button" id="quick-chat-button-3">?</button>
         <button class="quick-chat-button" id="quick-chat-button-4">!</button>
         <button class="quick-chat-button" id="quick-chat-button-5">✓</button>
-
+        <button id="red-button" class="color-button" style="border:1px solid #000000; background-color: #FF0000">Red</button>
+        <button id="blue-button" class="color-button" style="border:1px solid #000000; background-color: #0000FF">Blue</button>
     </div>
-    <canvas id="canvas" width="300px" height="300px" style="border:1px solid #000000;">
+    <canvas class = "u-max-full-width" id="canvas" style="border:1px solid #000000;">
         Sorry, your browser doesn't support the canvas element.
     </canvas>
     <p id="message">Message</p>
-    <button id="red-button" class="color-button" style="border:1px solid #000000; background-color: #FF0000">Red</button>
-    <button id="blue-button" class="color-button" style="border:1px solid #000000; background-color: #0000FF">Blue</button>
     <input id="input-text" type="text" name="test">
     <div id="footer" style="text-align:center">
         <button class="color-button" id="text-mode-button">Textbox</button>
