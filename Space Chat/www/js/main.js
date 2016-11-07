@@ -119,6 +119,11 @@ function updateCurrentQuickChatIcon() {
 $(document).ready(function() {
 	var canvas = $("#canvas");
 
+	var c = document.getElementById("canvas");
+	c.width = document.body.clientWidth;
+	c.height = document.body.clientHeight;
+	console.log(document.body.clientHeight);
+
 	canvas.on('touchstart', handleEnd);
 	canvas.click(handleClick);
 	$(document).resize(function(){console.log("Resized");});
