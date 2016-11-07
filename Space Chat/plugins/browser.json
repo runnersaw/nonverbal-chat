@@ -34,6 +34,9 @@
         "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
         },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
+        },
         "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
         },
@@ -63,14 +66,10 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
-        }
-    },
-    "dependent_plugins": {
+        },
         "cordova-plugin-compat": {
             "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
-        },
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.gatesofthearctic.nonverbalchat"
         }
-    }
+    },
+    "dependent_plugins": {}
 }

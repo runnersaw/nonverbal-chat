@@ -1,12 +1,14 @@
 
 var Modes = {
 	TEXT: {name: 'Text'},
-	NONE: {name: 'None'}
+	NONE: {name: 'None'},
+	QUICK_CHAT: {name: 'QuickChat'}
 };
 
 var Session = function() {
 	this.mode = Modes.NONE;
 	this.currentColor = '#000000';
+	this.currentSelectedQuickChat = undefined;
 };
 
 Session.Modes = Modes;
@@ -34,6 +36,12 @@ function touchEnded(x, y) {
 		input.show();
 		input.focus();
 	}
+	else if (session.mode == Session.Modes.QUICK_CHAT) {
+		drawText(session.currentSelectedQuickChat.innerHTML, x, y, '30px');
+		session.mode = Session.Modes.NONE;
+		session.currentSelectedQuickChat = undefined;
+		updateCurrentQuickChatIcon();
+	}
 }
 
 function enteredText(input) {
@@ -52,7 +60,7 @@ function enteredText(input) {
 function drawText(text, x, y, fontSize) {
 	var c = document.getElementById("canvas");
 	var ctx = c.getContext("2d");
-	ctx.font = fontSize+" verdana";
+	ctx.font = fontSize+" Verdana";
 	ctx.fillStyle = session.currentColor;
 	ctx.fillText(text,x,y);
 }
@@ -85,8 +93,36 @@ function setColor(color, button) {
 	session.currentColor = color;
 }
 
+function quickChatButtonPressed(evt) {
+	session.currentSelectedQuickChat = evt.currentTarget;
+	session.mode = Session.Modes.QUICK_CHAT;
+	updateCurrentQuickChatIcon();
+}
+
+function updateCurrentQuickChatIcon() {
+	var quickChatButtons = $('.quick-chat-button');
+	for (var i=0; i<quickChatButtons.length; i++) {
+		var button = quickChatButtons[i];
+		log(button);
+		if (session.currentSelectedQuickChat == button) {
+			$(button).css({
+				'background-color': 'green'
+			});
+		} else {
+			$(button).css({
+				'background-color': 'white'
+			});
+		}
+	}
+}
+
 $(document).ready(function() {
 	var canvas = $("#canvas");
+
+	var c = document.getElementById("canvas");
+	c.width = document.body.clientWidth;
+	c.height = document.body.clientHeight;
+	console.log(document.body.clientHeight);
 
 	canvas.on('touchstart', handleEnd);
 	canvas.click(handleClick);
@@ -120,6 +156,9 @@ $(document).ready(function() {
 			'background-color': 'green'
 		});
 	});
+
+	var quickChatButtons = $('.quick-chat-button');
+	quickChatButtons.click(quickChatButtonPressed);
 });
 
 
