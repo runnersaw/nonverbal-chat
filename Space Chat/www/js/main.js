@@ -24,9 +24,9 @@ function handleEnd(evt) {
 }
 
 function touchEnded(x, y) {
-	log('hello');
 	if (session.mode == Session.Modes.TEXT || session.mode == Session.Modes.NONE) { // Default to text box
-		log('hi');
+		updateCurrentMode(Session.Modes.TEXT);
+
 		var input = $("#input-text");
 		input.css({
 			'position': 'absolute',
@@ -38,8 +38,8 @@ function touchEnded(x, y) {
 	}
 	else if (session.mode == Session.Modes.QUICK_CHAT) {
 		drawText(session.currentSelectedQuickChat.innerHTML, x, y, '30px');
-		session.mode = Session.Modes.NONE;
-		session.currentSelectedQuickChat = undefined;
+
+		updateCurrentMode(Session.Modes.NONE);
 		updateCurrentQuickChatIcon();
 	}
 }
@@ -49,12 +49,8 @@ function enteredText(input) {
 
 	input.hide();
 	input.val('');
-	session.mode = Session.Modes.NONE;
 
-	var textModeButton = $('#text-mode-button');
-	textModeButton.css({
-		'background-color': 'gray'
-	});
+	updateCurrentMode(Session.Modes.NONE);
 }
 
 function drawText(text, x, y, fontSize) {
@@ -95,7 +91,7 @@ function setColor(color, button) {
 
 function quickChatButtonPressed(evt) {
 	session.currentSelectedQuickChat = evt.currentTarget;
-	session.mode = Session.Modes.QUICK_CHAT;
+	updateCurrentMode(Session.Modes.QUICK_CHAT);
 	updateCurrentQuickChatIcon();
 }
 
@@ -103,7 +99,6 @@ function updateCurrentQuickChatIcon() {
 	var quickChatButtons = $('.quick-chat-button');
 	for (var i=0; i<quickChatButtons.length; i++) {
 		var button = quickChatButtons[i];
-		log(button);
 		if (session.currentSelectedQuickChat == button) {
 			$(button).css({
 				'background-color': 'green'
@@ -116,17 +111,46 @@ function updateCurrentQuickChatIcon() {
 	}
 }
 
+function updateCurrentMode(mode) {
+	session.mode = mode;
+
+	if (mode != Session.Modes.QUICK_CHAT) {
+		session.currentSelectedQuickChat = undefined;
+	}
+
+	if (mode != Session.Modes.TEXT) {
+		var input = $("#input-text");
+		input.hide();
+	}
+
+	// Reset color of current mode button
+	var modeButtons = $('.mode-button');
+	for (var i=0; i<modeButtons.length; i++) {
+		var button = modeButtons[i];
+		log(button.id);
+		if (session.mode == Session.Modes.TEXT && "text-mode-button" == button.id) {
+			$(button).css({
+				'background-color': 'green'
+			});
+		} else {
+			$(button).css({
+				'background-color': 'gray'
+			});
+		}
+	}
+
+	updateCurrentQuickChatIcon();
+}
+
 $(document).ready(function() {
 	var canvas = $("#canvas");
 
 	var c = document.getElementById("canvas");
 	c.width = document.body.clientWidth;
 	c.height = document.body.clientHeight;
-	console.log(document.body.clientHeight);
 
 	canvas.on('touchstart', handleEnd);
 	canvas.click(handleClick);
-	$(document).resize(function(){console.log("Resized");});
 
 	var input = $("#input-text");
 	input.hide();
@@ -134,9 +158,6 @@ $(document).ready(function() {
 	    if (evt.keyCode === 13) {  //checks whether the pressed key is "Enter"
 	        enteredText(input);
 	    }
-	});
-	input.focus(function() {
-		log('focused');
 	});
 
 	var color_buttons = $('.color-button');
@@ -151,10 +172,8 @@ $(document).ready(function() {
 
 	var textModeButton = $('#text-mode-button');
 	textModeButton.click(function(evt) {
-		session.mode = Session.Modes.TEXT;
-		textModeButton.css({
-			'background-color': 'green'
-		});
+		updateCurrentMode(Session.Modes.TEXT);
+		updateCurrentQuickChatIcon();
 	});
 
 	var quickChatButtons = $('.quick-chat-button');
