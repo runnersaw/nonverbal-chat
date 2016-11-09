@@ -5,7 +5,7 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
@@ -27,21 +27,21 @@
 
 <body>
     <div id="quick-chat-icons-container">
+        <button class="mode-button" id="text-mode-button">Textbox</button>
         <button class="quick-chat-button" id="quick-chat-button-1">Y</button>
         <button class="quick-chat-button" id="quick-chat-button-2">N</button>
         <button class="quick-chat-button" id="quick-chat-button-3">?</button>
         <button class="quick-chat-button" id="quick-chat-button-4">!</button>
         <button class="quick-chat-button" id="quick-chat-button-5">✓</button>
-        <button id="red-button" class="color-button" style="border:1px solid #000000; background-color: #FF0000">Red</button>
-        <button id="blue-button" class="color-button" style="border:1px solid #000000; background-color: #0000FF">Blue</button>
     </div>
     <canvas id="canvas" style="border:1px solid #000000;">
         Sorry, your browser doesn't support the canvas element.
     </canvas>
     <p id="message">Message</p>
-    <input id="input-text" type="text" name="test">
-    <div id="footer" style="text-align:center">
-        <button class="mode-button" id="text-mode-button">Textbox</button>
+    <textarea rows="4" cols="50" id="input-text" width='200px' name="test"></textarea>
+    <div id="footer" style="position:absolute;bottom:0;text-align:center">
+        <button id="red-button" class="color-button" style="background-color: #FF0000"></button>
+        <button id="blue-button" class="color-button" style="background-color: #0000FF"></button>
     </div>
 
     <!-- Javascripts -->

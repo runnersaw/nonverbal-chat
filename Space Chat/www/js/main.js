@@ -9,6 +9,7 @@ var Session = function() {
 	this.mode = Modes.NONE;
 	this.currentColor = '#000000';
 	this.currentSelectedQuickChat = undefined;
+	this.origHeight = window.innerHeight;
 };
 
 Session.Modes = Modes;
@@ -20,7 +21,7 @@ function handleClick(evt) {
 }
 
 function handleEnd(evt) {
-	touchEnded(evt.touches[0].pageX, evt.touches[0].pageY);
+	touchEnded(evt.changedTouches[0].pageX, evt.changedTouches[0].pageY);
 }
 
 function touchEnded(x, y) {
@@ -67,26 +68,30 @@ function log(x) {
 	message.innerHTML = x;
 }
 
-function getColorForButtonText(text) {
-	if (text === 'Red') {
+function getColorForButtonId(buttonId) {
+	console.log(buttonId);
+	if (buttonId === 'red-button') {
 		return '#FF0000';
-	} else if (text === 'Blue') {
+	} else if (buttonId === 'blue-button') {
 		return '#0000FF';
 	}
 }
 
 function setColor(color, button) {
 	$(".color-button").css({
-		'border': '1px solid #000000'
+		'border': '0px'
 	})
 	button.css({
-		'border': '5px solid '+color
+		'border': '3px solid #fff'
 	});
 	var output = $("#input-text");
 	output.css({
 		color: color
 	})
 	session.currentColor = color;
+
+	updateCurrentMode(session.mode);
+	updateCurrentQuickChatIcon();
 }
 
 function quickChatButtonPressed(evt) {
@@ -101,7 +106,7 @@ function updateCurrentQuickChatIcon() {
 		var button = quickChatButtons[i];
 		if (session.currentSelectedQuickChat == button) {
 			$(button).css({
-				'background-color': 'green'
+				'background-color': session.currentColor
 			});
 		} else {
 			$(button).css({
@@ -130,16 +135,25 @@ function updateCurrentMode(mode) {
 		log(button.id);
 		if (session.mode == Session.Modes.TEXT && "text-mode-button" == button.id) {
 			$(button).css({
-				'background-color': 'green'
+				'background-color': session.currentColor
 			});
 		} else {
 			$(button).css({
-				'background-color': 'gray'
+				'background-color': 'white'
 			});
 		}
 	}
 
 	updateCurrentQuickChatIcon();
+}
+
+function updateFooterPosition() {
+	var footer = $('#footer');
+	var height = footer.height();
+	log(window.innerHeight);
+	log(session.origHeight);
+	log(window.outerHeight);
+	footer.css({'bottom':(session.origHeight-window.innerHeight-window.scrollY).toString()+'px'});
 }
 
 $(document).ready(function() {
@@ -149,8 +163,11 @@ $(document).ready(function() {
 	c.width = document.body.clientWidth;
 	c.height = document.body.clientHeight;
 
-	canvas.on('touchstart', handleEnd);
-	canvas.click(handleClick);
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+		canvas.on('touchend', handleEnd);
+	} else {
+		canvas.click(handleClick);
+	}
 
 	var input = $("#input-text");
 	input.hide();
@@ -163,7 +180,7 @@ $(document).ready(function() {
 	var color_buttons = $('.color-button');
 	color_buttons.click(function(evt) {
 		var button = $(evt.currentTarget);
-		var color = getColorForButtonText(evt.currentTarget.innerHTML);
+		var color = getColorForButtonId(evt.currentTarget.id);
 		setColor(color, button);
 	});
 
@@ -178,6 +195,8 @@ $(document).ready(function() {
 
 	var quickChatButtons = $('.quick-chat-button');
 	quickChatButtons.click(quickChatButtonPressed);
+
+	setInterval(updateFooterPosition, 20);
 });
 
 
