@@ -69,7 +69,6 @@ function log(x) {
 }
 
 function getColorForButtonId(buttonId) {
-	console.log(buttonId);
 	if (buttonId === 'red-button') {
 		return '#FF0000';
 	} else if (buttonId === 'blue-button') {
@@ -132,7 +131,6 @@ function updateCurrentMode(mode) {
 	var modeButtons = $('.mode-button');
 	for (var i=0; i<modeButtons.length; i++) {
 		var button = modeButtons[i];
-		log(button.id);
 		if (session.mode == Session.Modes.TEXT && "text-mode-button" == button.id) {
 			$(button).css({
 				'background-color': session.currentColor
@@ -150,9 +148,6 @@ function updateCurrentMode(mode) {
 function updateFooterPosition() {
 	var footer = $('#footer');
 	var height = footer.height();
-	log(window.innerHeight);
-	log(session.origHeight);
-	log(window.outerHeight);
 	footer.css({'bottom':(session.origHeight-window.innerHeight-window.scrollY).toString()+'px'});
 }
 
