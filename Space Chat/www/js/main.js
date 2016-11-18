@@ -25,18 +25,13 @@ function handleEnd(evt) {
 }
 
 function touchEnded(x, y) {
-	console.log('touch');
 	// Do text if text is chosen or if there was no recent mode
 	if (session.mode == Session.Modes.TEXT || session.mode == Session.Modes.NONE) {
 		updateCurrentMode(Session.Modes.TEXT);
 
 		var input = $("#input-text");
-		console.log('hi');
-		console.log(input.val());
-		console.log(input.val() == '');
 
 		if (input.val() == '' || input.val() == undefined) {
-			console.log('yo');
 			input.css({
 				'position': 'absolute',
 				'left': x+'px',
