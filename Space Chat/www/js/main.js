@@ -25,22 +25,32 @@ function handleEnd(evt) {
 }
 
 function touchEnded(x, y) {
-	if (session.mode == Session.Modes.TEXT || session.mode == Session.Modes.NONE) { // Default to text box
+	console.log('touch');
+	// Do text if text is chosen or if there was no recent mode
+	if (session.mode == Session.Modes.TEXT || session.mode == Session.Modes.NONE) {
 		updateCurrentMode(Session.Modes.TEXT);
 
 		var input = $("#input-text");
-		input.css({
-			'position': 'absolute',
-			'left': x+'px',
-			'top': y+'px'
-		});
-		input.show();
-		input.focus();
+		console.log('hi');
+		console.log(input.val());
+		console.log(input.val() == '');
+
+		if (input.val() == '' || input.val() == undefined) {
+			console.log('yo');
+			input.css({
+				'position': 'absolute',
+				'left': x+'px',
+				'top': y+'px'
+			});
+			input.show();
+			input.focus();
+		} else {
+			enteredText(input);
+		}
 	}
 	else if (session.mode == Session.Modes.QUICK_CHAT) {
 		drawText(session.currentSelectedQuickChat.innerHTML, x, y, '30px');
 
-		updateCurrentMode(Session.Modes.NONE);
 		updateCurrentQuickChatIcon();
 	}
 }
@@ -50,8 +60,6 @@ function enteredText(input) {
 
 	input.hide();
 	input.val('');
-
-	updateCurrentMode(Session.Modes.NONE);
 }
 
 function drawText(text, x, y, fontSize) {
