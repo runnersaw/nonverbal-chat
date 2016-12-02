@@ -3,6 +3,7 @@ define(function() {
 		TEXT: {name: 'Text'},
 		NONE: {name: 'None'},
 		QUICK_CHAT: {name: 'QuickChat'}
+		DRAWING: {name: 'Drawing'}
 	};
 
 	var Session = function() {

@@ -40,6 +40,20 @@ define(function(require) {
 		}
 	}
 
+	function touchStarted(x, y) {
+		if (session.mode == DRAWING) {
+			addClick(x,y)
+			redraw();
+		}
+	}
+
+	function touchMoved(x, y) {
+		if (session.mode == DRAWING) {
+			addClick(x,y)
+			redraw();
+		}
+	}
+
 	function touchEnded(x, y) {
 		// Do text if text is chosen or if there was no recent mode
 		if (session.mode == Session.Modes.TEXT || session.mode == Session.Modes.NONE) {
@@ -195,9 +209,15 @@ define(function(require) {
 		// PLEASE ONLY ADD EVENT HANDLERS IN MAIN. THIS PREVENTS US OVERRIDING EACH OTHER'S EVENT HANDLERS
 
 		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+<<<<<<< HEAD
 			canvas.on('touchstart', handleTouchstart);
 			canvas.on('touchmove', handleTouchmove);
 			canvas.on('touchend', handleTouchend);
+=======
+			canvas.on('touchend', handleEnd);
+			canvas.bind('touchstart', touchStarted);
+			canvas.bind('touchmove', touchMoved);
+>>>>>>> Add drawing feature
 		} else {
 			canvas.on('mousedown', handleMousedown);
 			canvas.on('mousemove', handleMousemove);
