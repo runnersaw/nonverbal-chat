@@ -215,9 +215,14 @@ define(function(require) {
 			canvas.on('touchend', handleTouchend);
 =======
 			canvas.on('touchend', handleEnd);
+<<<<<<< HEAD
 			canvas.bind('touchstart', touchStarted);
 			canvas.bind('touchmove', touchMoved);
 >>>>>>> Add drawing feature
+=======
+			canvas.bind('touchstart', touchStarted(x,y));
+			canvas.bind('touchmove', touchMoved(x,y));
+>>>>>>> I broke something
 		} else {
 			canvas.on('mousedown', handleMousedown);
 			canvas.on('mousemove', handleMousemove);
