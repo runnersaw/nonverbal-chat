@@ -7,12 +7,40 @@ define(function(require) {
 	var QuickChatMessage = require('models/QuickChatMessage').QuickChatMessage;
 	var TextMessage = require('models/TextMessage').TextMessage;
 
-	function handleClick(evt) {
-		touchEnded(evt.pageX, evt.pageY);
+	// Event handling
+	var pan = require('pan');
+
+	function handleTouchstart(evt) {
+		pan.panTouchstart(evt);
+		log(evt.type);
 	}
 
-	function handleEnd(evt) {
-		touchEnded(evt.changedTouches[0].pageX, evt.changedTouches[0].pageY);
+	function handleTouchmove(evt) {
+		pan.panTouchmove(evt);
+	}
+
+	function handleTouchend(evt) {
+		var wasPanned = pan.panTouchend(evt);
+		log(wasPanned);
+		if (!wasPanned) {
+			touchEnded(evt.changedTouches[0].pageX, evt.changedTouches[0].pageY);
+		}
+		log(evt.type);
+	}
+
+	function handleMousedown(evt) {
+		pan.panMousedown(evt);
+	}
+
+	function handleMousemove(evt) {
+		pan.panMousemove(evt);
+	}
+
+	function handleMouseup(evt) {
+		var wasPanned = pan.panMouseup(evt);
+		if (!wasPanned) {
+			touchEnded(evt.pageX, evt.pageY);
+		}
 	}
 
 	function touchEnded(x, y) {
@@ -145,6 +173,20 @@ define(function(require) {
 		footer.css({'bottom':(session.origHeight-window.innerHeight-window.scrollY).toString()+'px'});
 	}
 
+	function redraw() {
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+
+		// Clear things
+		var p1 = ctx.transformedPoint(0,0);
+		var p2 = ctx.transformedPoint(canvas.width,canvas.height);
+		ctx.clearRect(p1.x,p1.y,p2.x-p1.x,p2.y-p1.y);
+
+		for (var message in session.messages) {
+			session.messages[message].draw(canvas);
+		}
+	}
+
 	$(document).ready(function() {
 		var canvas = $("#canvas");
 
@@ -152,11 +194,24 @@ define(function(require) {
 		c.width = document.body.clientWidth;
 		c.height = document.body.clientHeight;
 
+		// PLEASE ONLY ADD EVENT HANDLERS IN MAIN. THIS PREVENTS US OVERRIDING EACH OTHER'S EVENT HANDLERS
+
 		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-			canvas.on('touchend', handleEnd);
+			canvas.on('touchstart', handleTouchstart);
+			canvas.on('touchmove', handleTouchmove);
+			canvas.on('touchend', handleTouchend);
 		} else {
-			canvas.click(handleClick);
+			canvas.on('mousedown', handleMousedown);
+			canvas.on('mousemove', handleMousemove);
+			canvas.on('mouseup', handleMouseup);
 		}
+
+		c.addEventListener('DOMMouseScroll',pan.handleScroll,false);
+		c.addEventListener('mousewheel',pan.handleScroll,false);
+
+		pan.setRedraw(redraw);
+
+		pan.trackTransforms();
 
 		var input = $("#input-text");
 		input.hide();
