@@ -2,7 +2,7 @@ define(function() {
 	var Modes = {
 		TEXT: {name: 'Text'},
 		NONE: {name: 'None'},
-		QUICK_CHAT: {name: 'QuickChat'}
+		QUICK_CHAT: {name: 'QuickChat'},
 		DRAWING: {name: 'Drawing'}
 	};
 

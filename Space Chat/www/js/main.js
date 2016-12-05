@@ -6,6 +6,7 @@ define(function(require) {
 	// Messages
 	var QuickChatMessage = require('models/QuickChatMessage').QuickChatMessage;
 	var TextMessage = require('models/TextMessage').TextMessage;
+	var Drawing = require('models/Drawing').Drawing
 
 	// Event handling
 	var pan = require('pan');
@@ -81,6 +82,9 @@ define(function(require) {
 			drawMessage(message);
 
 			updateCurrentQuickChatIcon();
+		} else if (session.mode == Session.Modes.QUICK_CHAT) {
+			var message = new Drawing(session.currentColor, x, y);
+			drawMessage(message);
 		}
 	}
 
@@ -166,6 +170,11 @@ define(function(require) {
 		for (var i=0; i<modeButtons.length; i++) {
 			var button = modeButtons[i];
 			if (session.mode == Session.Modes.TEXT && "text-mode-button" == button.id) {
+				$(button).css({
+					'background-color': session.currentColor
+				});
+			}
+			else if (session.mode == Session.Modes.DRAWING && "drawing-mode-button" == button.id) {
 				$(button).css({
 					'background-color': session.currentColor
 				});
@@ -259,6 +268,11 @@ define(function(require) {
 			updateCurrentMode(Session.Modes.TEXT);
 			updateCurrentQuickChatIcon();
 		});
+		var drawingModeButton = $('#drawing-mode-button');
+		drawingModeButton.click(function(evt) {
+			updateCurrentMode(Session.Modes.DRAWING);
+			updateCurrentQuickChatIcon();
+		})
 
 		var quickChatButtons = $('.quick-chat-button');
 		quickChatButtons.click(quickChatButtonPressed);

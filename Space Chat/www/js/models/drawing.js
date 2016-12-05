@@ -1,7 +1,7 @@
 define(function() {
 
-	var Drawing = function(size, color, x, y) {
-		this.size = size;
+	var Drawing = function(color, x, y) {
+		// this.size = size;
 		this.color = color;
 		this.x = x;
 		this.y = y;
