@@ -12,6 +12,7 @@ define(function() {
 		this.currentSelectedQuickChat = undefined;
 		this.origHeight = window.innerHeight;
 		this.messages = [];
+		this.currentDrawing=undefined;
 	};
 
 	Session.Modes = Modes;

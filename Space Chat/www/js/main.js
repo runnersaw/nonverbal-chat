@@ -41,17 +41,22 @@ define(function(require) {
 		}
 	}
 
-	function touchStarted(x, y) {
-		if (session.mode == DRAWING) {
-			addClick(x,y)
-			redraw();
+	function touchStarted(evt) {
+		var x = evt.evt.changedTouches[0].pageX;
+		var y = evt.changedTouches[0].pageY;
+		if (session.mode == Session.Modes.DRAWING) {
+			session.currentDrawing=new Drawing(session.currentColor,x,y);
+			session.currentDrawing.addClick(x,y);
+			session.currentDrawing.redraw();
 		}
 	}
 
-	function touchMoved(x, y) {
-		if (session.mode == DRAWING) {
-			addClick(x,y)
-			redraw();
+	function touchMoved(evt) {
+		var x = evt.evt.changedTouches[0].pageX;
+		var y = evt.changedTouches[0].pageY;
+		if (session.mode == Session.Modes.DRAWING) {
+			session.currentDrawing.addClick(x,y);
+			session.currentDrawing.redraw();
 		}
 	}
 
@@ -82,9 +87,10 @@ define(function(require) {
 			drawMessage(message);
 
 			updateCurrentQuickChatIcon();
-		} else if (session.mode == Session.Modes.QUICK_CHAT) {
-			var message = new Drawing(session.currentColor, x, y);
-			drawMessage(message);
+		} else if (session.mode == Session.Modes.DRAWING) {
+			session.currentDrawing.addClick(x,y);
+			session.currentDrawing.redraw();
+			session.currentDrawing=undefined;
 		}
 	}
 
@@ -218,20 +224,9 @@ define(function(require) {
 		// PLEASE ONLY ADD EVENT HANDLERS IN MAIN. THIS PREVENTS US OVERRIDING EACH OTHER'S EVENT HANDLERS
 
 		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-<<<<<<< HEAD
-			canvas.on('touchstart', handleTouchstart);
-			canvas.on('touchmove', handleTouchmove);
-			canvas.on('touchend', handleTouchend);
-=======
 			canvas.on('touchend', handleEnd);
-<<<<<<< HEAD
-			canvas.bind('touchstart', touchStarted);
-			canvas.bind('touchmove', touchMoved);
->>>>>>> Add drawing feature
-=======
-			canvas.bind('touchstart', touchStarted(x,y));
-			canvas.bind('touchmove', touchMoved(x,y));
->>>>>>> I broke something
+			canvas.on('touchstart', touchStarted);
+			canvas.on('touchmove', touchMoved);
 		} else {
 			canvas.on('mousedown', handleMousedown);
 			canvas.on('mousemove', handleMousemove);

@@ -6,18 +6,18 @@ define(function() {
 		this.x = x;
 		this.y = y;
 
-		var clickX = new Array();
-		var clickY = new Array();
-		var clickDrag = new Array();
+		this.clickX = new Array();
+		this.clickY = new Array();
+		this.clickDrag = new Array();
 
-		function addClick(x, y, dragging)
+		this.addClick=function(x, y, dragging)
 		{
-		  clickX.push(x);
-		  clickY.push(y);
-		  clickDrag.push(dragging);
+		  this.clickX.push(x);
+		  this.clickY.push(y);
+		  this.clickDrag.push(dragging);
 		}
 
-		function redraw(canvas){
+		this.redraw=function(canvas){
 			context = canvas.getContext("2d");
 			context.clearRect(0, 0, canvas.width, canvas.height); // Clears the canvas
 
@@ -25,14 +25,14 @@ define(function() {
 			context.lineJoin = "round";
 			context.lineWidth = 5;
 					
-			for(var i=0; i < clickX.length; i++) {		
+			for(var i=0; i < this.clickX.length; i++) {		
 			context.beginPath();
-			if(clickDrag[i] && i){
-			  context.moveTo(clickX[i-1], clickY[i-1]);
+			if(this.clickDrag[i] && i){
+			  context.moveTo(this.clickX[i-1], this.clickY[i-1]);
 			 }else{
-			   context.moveTo(clickX[i]-1, clickY[i]);
+			   context.moveTo(this.clickX[i]-1, this.clickY[i]);
 			 }
-			 context.lineTo(clickX[i], clickY[i]);
+			 context.lineTo(this.clickX[i], this.clickY[i]);
 			 context.closePath();
 			 context.stroke();
 			}
