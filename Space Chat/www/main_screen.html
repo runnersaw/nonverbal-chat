@@ -25,12 +25,15 @@
     <!-- <link rel="stylesheet" type="text/css" href="css/index.css" /> -->
 
     <title>Space Chat</title>
+
 </head>
 
 <body>
     <div class="container">
-        <h1>Let's Communicate Nonverbally*!</h1>
-        <h3>*It's like talking, but you turn off your voice.</h3>
+<!-- conversation initiation header-->
+        <h1 id="title" align="center">Let's Communicate Nonverbally*!</h1>
+        <h3 id="subtitle" align="center">*It's like talking, but you turn off your voice.</h3>
+<!-- conversation initiation default screen -->
         <div class="row">
             <a href="#" class="button button-primary color-button" id = "im_in">I'm in!</a>
         </div>
@@ -40,7 +43,28 @@
         <div class="row">
             <button id = "no_thanks" class="button button-primary color-button center">No, thanks.</button>
         </div>
+<!-- if the "tell me more" button is tapped, show this -->
+        <div  style="background-color:lightblue;">
+        <div class="row" id="tellMeMorePopup">
+        <p align="center">I'm not going to use my voice. We can use this app to have a conversation without speaking.</p>
+        </div>
+        <div>
+        <button id = "popup_no_thanks" class="button button-primary color-button center">No, thanks.</button>
+        </div>
+        <div>
+        <button id = "popup_great" class="button button-primary color-button center">Great, let's go!</button>
+        </div>
+        </div>
+<!-- if the "no thanks" button is tapped, show this -->
+        <div  style="background-color:lightgreen;">
+        <div class="row" id="noThanksPopup">
+        <button id="closeNoThanksPopup" class= "button"> X </button>
+        <p align="center">Please hand the phone back to its owner. Maybe we can chat another time.
+        </div>
+        </div>
+
     </div>
+
 
     <!-- Javascripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -50,3 +74,7 @@
 </body>
 
 </html>
+
+        
+
+
