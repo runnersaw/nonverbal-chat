@@ -12,7 +12,6 @@ define(function(require) {
 
 	function handleTouchstart(evt) {
 		pan.panTouchstart(evt);
-		log(evt.type);
 	}
 
 	function handleTouchmove(evt) {
@@ -21,11 +20,9 @@ define(function(require) {
 
 	function handleTouchend(evt) {
 		var wasPanned = pan.panTouchend(evt);
-		log(wasPanned);
 		if (!wasPanned) {
 			touchEnded(evt.changedTouches[0].pageX, evt.changedTouches[0].pageY);
 		}
-		log(evt.type);
 	}
 
 	function handleMousedown(evt) {
@@ -62,7 +59,11 @@ define(function(require) {
 				enteredText(input);
 			}
 		} else if (session.mode == Session.Modes.QUICK_CHAT) {
-			var message = new QuickChatMessage(session.currentSelectedQuickChat.innerHTML, session.currentColor, x, y);
+			var canvas = document.getElementById('canvas');
+			var ctx = canvas.getContext('2d');
+
+			var p = ctx.transformedPoint(x, y);
+			var message = new QuickChatMessage(session.currentSelectedQuickChat.innerHTML, session.currentColor, p.x, p.y);
 			drawMessage(message);
 
 			updateCurrentQuickChatIcon();
@@ -70,7 +71,11 @@ define(function(require) {
 	}
 
 	function enteredText(input) {
-		var message = new TextMessage(input.val(), session.currentColor, input.position().left, input.position().top + parseInt(input.css('font-size')), input.css('font-size'));
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+
+		var p = ctx.transformedPoint(input.position().left, input.position().top + parseInt(input.css('font-size')));
+		var message = new TextMessage(input.val(), session.currentColor, p.x, p.y, input.css('font-size'));
 		drawMessage(message);
 
 		input.hide();
@@ -81,13 +86,6 @@ define(function(require) {
 		var c = document.getElementById("canvas");
 		message.draw(c);
 		session.messages.push(message);
-		log(session);
-	}
-
-	function log(x) {
-		console.log(x);
-		var message = document.getElementById('message');
-		message.innerHTML = x;
 	}
 
 	function getColorForButtonId(buttonId) {
