@@ -7,12 +7,37 @@ define(function(require) {
 	var QuickChatMessage = require('models/QuickChatMessage').QuickChatMessage;
 	var TextMessage = require('models/TextMessage').TextMessage;
 
-	function handleClick(evt) {
-		touchEnded(evt.pageX, evt.pageY);
+	// Event handling
+	var pan = require('pan');
+
+	function handleTouchstart(evt) {
+		pan.panTouchstart(evt);
 	}
 
-	function handleEnd(evt) {
-		touchEnded(evt.changedTouches[0].pageX, evt.changedTouches[0].pageY);
+	function handleTouchmove(evt) {
+		pan.panTouchmove(evt);
+	}
+
+	function handleTouchend(evt) {
+		var wasPanned = pan.panTouchend(evt);
+		if (!wasPanned) {
+			touchEnded(evt.changedTouches[0].pageX, evt.changedTouches[0].pageY);
+		}
+	}
+
+	function handleMousedown(evt) {
+		pan.panMousedown(evt);
+	}
+
+	function handleMousemove(evt) {
+		pan.panMousemove(evt);
+	}
+
+	function handleMouseup(evt) {
+		var wasPanned = pan.panMouseup(evt);
+		if (!wasPanned) {
+			touchEnded(evt.pageX, evt.pageY);
+		}
 	}
 
 	function touchEnded(x, y) {
@@ -34,7 +59,11 @@ define(function(require) {
 				enteredText(input);
 			}
 		} else if (session.mode == Session.Modes.QUICK_CHAT) {
-			var message = new QuickChatMessage(session.currentSelectedQuickChat.innerHTML, session.currentColor, x, y);
+			var canvas = document.getElementById('canvas');
+			var ctx = canvas.getContext('2d');
+
+			var p = ctx.transformedPoint(x, y);
+			var message = new QuickChatMessage(session.currentSelectedQuickChat.innerHTML, session.currentColor, p.x, p.y);
 			drawMessage(message);
 
 			updateCurrentQuickChatIcon();
@@ -42,7 +71,11 @@ define(function(require) {
 	}
 
 	function enteredText(input) {
-		var message = new TextMessage(input.val(), session.currentColor, input.position().left, input.position().top + parseInt(input.css('font-size')), input.css('font-size'));
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+
+		var p = ctx.transformedPoint(input.position().left, input.position().top + parseInt(input.css('font-size')));
+		var message = new TextMessage(input.val(), session.currentColor, p.x, p.y, input.css('font-size'));
 		drawMessage(message);
 
 		input.hide();
@@ -53,13 +86,6 @@ define(function(require) {
 		var c = document.getElementById("canvas");
 		message.draw(c);
 		session.messages.push(message);
-		log(session);
-	}
-
-	function log(x) {
-		console.log(x);
-		var message = document.getElementById('message');
-		message.innerHTML = x;
 	}
 
 	function getColorForButtonId(buttonId) {
@@ -145,6 +171,20 @@ define(function(require) {
 		footer.css({'bottom':(session.origHeight-window.innerHeight-window.scrollY).toString()+'px'});
 	}
 
+	function redraw() {
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+
+		// Clear things
+		var p1 = ctx.transformedPoint(0,0);
+		var p2 = ctx.transformedPoint(canvas.width,canvas.height);
+		ctx.clearRect(p1.x,p1.y,p2.x-p1.x,p2.y-p1.y);
+
+		for (var message in session.messages) {
+			session.messages[message].draw(canvas);
+		}
+	}
+
 	$(document).ready(function() {
 		var canvas = $("#canvas");
 
@@ -152,11 +192,24 @@ define(function(require) {
 		c.width = document.body.clientWidth;
 		c.height = document.body.clientHeight;
 
+		// PLEASE ONLY ADD EVENT HANDLERS IN MAIN. THIS PREVENTS US OVERRIDING EACH OTHER'S EVENT HANDLERS
+
 		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-			canvas.on('touchend', handleEnd);
+			canvas.on('touchstart', handleTouchstart);
+			canvas.on('touchmove', handleTouchmove);
+			canvas.on('touchend', handleTouchend);
 		} else {
-			canvas.click(handleClick);
+			canvas.on('mousedown', handleMousedown);
+			canvas.on('mousemove', handleMousemove);
+			canvas.on('mouseup', handleMouseup);
 		}
+
+		c.addEventListener('DOMMouseScroll',pan.handleScroll,false);
+		c.addEventListener('mousewheel',pan.handleScroll,false);
+
+		pan.setRedraw(redraw);
+
+		pan.trackTransforms();
 
 		var input = $("#input-text");
 		input.hide();
