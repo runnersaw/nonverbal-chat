@@ -2,7 +2,8 @@ define(function() {
 	var Modes = {
 		TEXT: {name: 'Text'},
 		NONE: {name: 'None'},
-		QUICK_CHAT: {name: 'QuickChat'}
+		QUICK_CHAT: {name: 'QuickChat'},
+		DRAWING: {name: 'Drawing'}
 	};
 
 	var Session = function() {
@@ -11,6 +12,7 @@ define(function() {
 		this.currentSelectedQuickChat = undefined;
 		this.origHeight = window.innerHeight;
 		this.messages = [];
+		this.currentDrawing=undefined;
 	};
 
 	Session.Modes = Modes;

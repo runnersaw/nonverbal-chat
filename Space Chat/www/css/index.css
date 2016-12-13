@@ -26,7 +26,7 @@ h1 {
     position:absolute;
     left:0px;
     bottom:0px;
-    height: 40px;
+    height: 6em;
     margin: auto;
     overflow: hidden;
     background:#2E2E2E;
@@ -37,13 +37,11 @@ h1 {
 }
 
 #quick-chat-icons-container {
-    position:fixed;
     top:20px;
     right:0px;
     left:0px;
     height:50px;
     z-index:100;
-    display:;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
@@ -62,6 +60,8 @@ h1 {
     height:5em;
     width:5em;
     padding:0;
+    border-radius: 2.5em;
+    margin-top:.5em;
 }
 
 html, body {
@@ -69,5 +69,10 @@ html, body {
 }
 body {
   position: relative
+}
+
+#header {
+    position:absolute;
+    top:20px;
 }
 

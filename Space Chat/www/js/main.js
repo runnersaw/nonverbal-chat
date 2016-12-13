@@ -6,38 +6,115 @@ define(function(require) {
 	// Messages
 	var QuickChatMessage = require('models/QuickChatMessage').QuickChatMessage;
 	var TextMessage = require('models/TextMessage').TextMessage;
+	var Drawing = require('models/Drawing').Drawing;
 
 	// Event handling
 	var pan = require('pan');
 
 	function handleTouchstart(evt) {
-		pan.panTouchstart(evt);
+		evt.preventDefault();
+
+		if (session.mode == Session.Modes.DRAWING) {
+			var canvas = document.getElementById('canvas');
+			var ctx = canvas.getContext('2d');
+
+			var x = evt.changedTouches[0].pageX;
+			var y = evt.changedTouches[0].pageY;
+			var p = ctx.transformedPoint(x, y);
+
+			session.currentDrawing = new Drawing(session.currentColor,p.x,p.y);
+			session.currentDrawing.addClick(p.x,p.y);
+		} else {
+			// pan
+			pan.panTouchstart(evt);
+		}
+		redraw();
 	}
 
 	function handleTouchmove(evt) {
-		pan.panTouchmove(evt);
+		evt.preventDefault();
+
+		if (session.mode == Session.Modes.DRAWING) {
+			var canvas = document.getElementById('canvas');
+			var ctx = canvas.getContext('2d');
+
+			var x = evt.changedTouches[0].pageX;
+			var y = evt.changedTouches[0].pageY;
+			var p = ctx.transformedPoint(x, y);
+
+			session.currentDrawing.addClick(p.x,p.y);
+		} else {
+			pan.panTouchmove(evt);
+		}
+		redraw();
 	}
 
 	function handleTouchend(evt) {
-		var wasPanned = pan.panTouchend(evt);
+		evt.preventDefault();
+
+		var wasPanned = false;
+
+		if (session.mode != Session.Modes.DRAWING) {
+			wasPanned = pan.panTouchend(evt);
+		}
+
 		if (!wasPanned) {
 			touchEnded(evt.changedTouches[0].pageX, evt.changedTouches[0].pageY);
 		}
 	}
 
 	function handleMousedown(evt) {
-		pan.panMousedown(evt);
+		evt.preventDefault();
+
+		if (session.mode == Session.Modes.DRAWING) {
+			var canvas = document.getElementById('canvas');
+			var ctx = canvas.getContext('2d');
+
+			var x = evt.pageX;
+			var y = evt.pageY;
+			var p = ctx.transformedPoint(x, y);
+
+			session.currentDrawing = new Drawing(session.currentColor,p.x,p.y);
+			session.currentDrawing.addClick(p.x,p.y);
+		} else {
+			// pan
+			pan.panMousedown(evt);
+		}
+		redraw();
 	}
 
 	function handleMousemove(evt) {
-		pan.panMousemove(evt);
+		evt.preventDefault();
+
+		if (session.mode == Session.Modes.DRAWING && session.currentDrawing != undefined) {
+			var canvas = document.getElementById('canvas');
+			var ctx = canvas.getContext('2d');
+
+			var x = evt.pageX;
+			var y = evt.pageY;
+			var p = ctx.transformedPoint(x, y);
+
+			session.currentDrawing.addClick(p.x,p.y);
+		} else {
+			pan.panMousemove(evt);
+		}
+		redraw();
 	}
 
 	function handleMouseup(evt) {
-		var wasPanned = pan.panMouseup(evt);
+		evt.preventDefault();
+
+		var wasPanned = false;
+
+		if (session.mode != Session.Modes.DRAWING) {
+			wasPanned = pan.panMouseup(evt);
+		}
+
 		if (!wasPanned) {
 			touchEnded(evt.pageX, evt.pageY);
 		}
+
+		redraw();
 	}
 
 	function touchEnded(x, y) {
@@ -67,6 +144,15 @@ define(function(require) {
 			drawMessage(message);
 
 			updateCurrentQuickChatIcon();
+		} else if (session.mode == Session.Modes.DRAWING) {
+			var canvas = document.getElementById('canvas');
+			var ctx = canvas.getContext('2d');
+
+			var p = ctx.transformedPoint(x, y);
+
+			session.currentDrawing.addClick(p.x,p.y);
+			session.messages.push(session.currentDrawing);
+			session.currentDrawing=undefined;
 		}
 	}
 
@@ -155,6 +241,11 @@ define(function(require) {
 				$(button).css({
 					'background-color': session.currentColor
 				});
+			}
+			else if (session.mode == Session.Modes.DRAWING && "drawing-mode-button" == button.id) {
+				$(button).css({
+					'background-color': session.currentColor
+				});
 			} else {
 				$(button).css({
 					'background-color': 'white'
@@ -163,6 +254,12 @@ define(function(require) {
 		}
 
 		updateCurrentQuickChatIcon();
+	}
+
+	function updateHeaderPosition() {
+		var header = $('#header');
+		var height = header.height();
+		header.css({'top':(window.scrollY + 20).toString()+'px'});
 	}
 
 	function updateFooterPosition() {
@@ -183,12 +280,20 @@ define(function(require) {
 		for (var message in session.messages) {
 			session.messages[message].draw(canvas);
 		}
+
+		if (session.currentDrawing != undefined) {
+			session.currentDrawing.draw(canvas);
+		}
 	}
 
 	$(document).ready(function() {
 		var canvas = $("#canvas");
 
+		pan.trackTransforms();
+
 		var c = document.getElementById("canvas");
+		var ctx = c.getContext('2d');
+
 		c.width = document.body.clientWidth;
 		c.height = document.body.clientHeight;
 
@@ -202,14 +307,11 @@ define(function(require) {
 			canvas.on('mousedown', handleMousedown);
 			canvas.on('mousemove', handleMousemove);
 			canvas.on('mouseup', handleMouseup);
+			canvas.on('DOMMouseScroll',pan.handleScroll);
+			canvas.on('mousewheel',pan.handleScroll);
 		}
 
-		c.addEventListener('DOMMouseScroll',pan.handleScroll,false);
-		c.addEventListener('mousewheel',pan.handleScroll,false);
-
 		pan.setRedraw(redraw);
-
-		pan.trackTransforms();
 
 		var input = $("#input-text");
 		input.hide();
@@ -231,14 +333,30 @@ define(function(require) {
 
 		var textModeButton = $('#text-mode-button');
 		textModeButton.click(function(evt) {
-			updateCurrentMode(Session.Modes.TEXT);
-			updateCurrentQuickChatIcon();
+			if (session.mode == Session.Modes.TEXT) {
+				updateCurrentMode(Session.Modes.NONE);
+				updateCurrentQuickChatIcon();
+			} else {
+				updateCurrentMode(Session.Modes.TEXT);
+				updateCurrentQuickChatIcon();
+			}
 		});
+		var drawingModeButton = $('#drawing-mode-button');
+		drawingModeButton.click(function(evt) {
+			if (session.mode == Session.Modes.DRAWING) {
+				updateCurrentMode(Session.Modes.NONE);
+				updateCurrentQuickChatIcon();
+			} else {
+				updateCurrentMode(Session.Modes.DRAWING);
+				updateCurrentQuickChatIcon();
+			}
+		})
 
 		var quickChatButtons = $('.quick-chat-button');
 		quickChatButtons.click(quickChatButtonPressed);
 
-		setInterval(updateFooterPosition, 20);
+		setInterval(updateHeaderPosition, 10);
+		setInterval(updateFooterPosition, 10);
 	});
 
 });
