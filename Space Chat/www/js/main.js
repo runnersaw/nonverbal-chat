@@ -6,12 +6,14 @@ define(function(require) {
 	// Messages
 	var QuickChatMessage = require('models/QuickChatMessage').QuickChatMessage;
 	var TextMessage = require('models/TextMessage').TextMessage;
-	var Drawing = require('models/Drawing').Drawing
+	var Drawing = require('models/Drawing').Drawing;
 
 	// Event handling
 	var pan = require('pan');
 
 	function handleTouchstart(evt) {
+		evt.preventDefault();
+
 		if (session.mode == Session.Modes.DRAWING) {
 			var canvas = document.getElementById('canvas');
 			var ctx = canvas.getContext('2d');
@@ -30,6 +32,8 @@ define(function(require) {
 	}
 
 	function handleTouchmove(evt) {
+		evt.preventDefault();
+
 		if (session.mode == Session.Modes.DRAWING) {
 			var canvas = document.getElementById('canvas');
 			var ctx = canvas.getContext('2d');
@@ -46,6 +50,8 @@ define(function(require) {
 	}
 
 	function handleTouchend(evt) {
+		evt.preventDefault();
+
 		var wasPanned = false;
 
 		if (session.mode != Session.Modes.DRAWING) {
@@ -58,6 +64,8 @@ define(function(require) {
 	}
 
 	function handleMousedown(evt) {
+		evt.preventDefault();
+
 		if (session.mode == Session.Modes.DRAWING) {
 			var canvas = document.getElementById('canvas');
 			var ctx = canvas.getContext('2d');
@@ -76,6 +84,8 @@ define(function(require) {
 	}
 
 	function handleMousemove(evt) {
+		evt.preventDefault();
+
 		if (session.mode == Session.Modes.DRAWING && session.currentDrawing != undefined) {
 			var canvas = document.getElementById('canvas');
 			var ctx = canvas.getContext('2d');
@@ -92,6 +102,8 @@ define(function(require) {
 	}
 
 	function handleMouseup(evt) {
+		evt.preventDefault();
+
 		var wasPanned = false;
 
 		if (session.mode != Session.Modes.DRAWING) {
@@ -244,6 +256,12 @@ define(function(require) {
 		updateCurrentQuickChatIcon();
 	}
 
+	function updateHeaderPosition() {
+		var header = $('#header');
+		var height = header.height();
+		header.css({'top':(window.scrollY + 20).toString()+'px'});
+	}
+
 	function updateFooterPosition() {
 		var footer = $('#footer');
 		var height = footer.height();
@@ -271,7 +289,11 @@ define(function(require) {
 	$(document).ready(function() {
 		var canvas = $("#canvas");
 
+		pan.trackTransforms();
+
 		var c = document.getElementById("canvas");
+		var ctx = c.getContext('2d');
+
 		c.width = document.body.clientWidth;
 		c.height = document.body.clientHeight;
 
@@ -285,14 +307,11 @@ define(function(require) {
 			canvas.on('mousedown', handleMousedown);
 			canvas.on('mousemove', handleMousemove);
 			canvas.on('mouseup', handleMouseup);
+			canvas.on('DOMMouseScroll',pan.handleScroll);
+			canvas.on('mousewheel',pan.handleScroll);
 		}
 
-		c.addEventListener('DOMMouseScroll',pan.handleScroll,false);
-		c.addEventListener('mousewheel',pan.handleScroll,false);
-
 		pan.setRedraw(redraw);
-
-		pan.trackTransforms();
 
 		var input = $("#input-text");
 		input.hide();
@@ -336,6 +355,7 @@ define(function(require) {
 		var quickChatButtons = $('.quick-chat-button');
 		quickChatButtons.click(quickChatButtonPressed);
 
+		setInterval(updateHeaderPosition, 10);
 		setInterval(updateFooterPosition, 10);
 	});
 
