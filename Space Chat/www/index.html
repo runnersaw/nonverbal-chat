@@ -30,15 +30,16 @@
 <body>
     <div id="header">
         <div id="quick-chat-icons-container">
-            <button class="mode-button header-button first-header-button" id="text-mode-button"><img src='img/textbox.png' /></button>
-            <button class="mode-button header-button" id="drawing-mode-button"><img src='img/draw.png' /></button>
-            <button class="quick-chat-button header-button" id="quick-chat-button-1">Y</button>
-            <button class="quick-chat-button header-button" id="quick-chat-button-2">N</button>
-            <button class="quick-chat-button header-button" id="quick-chat-button-3">?</button>
-            <button class="quick-chat-button header-button" id="quick-chat-button-4">!</button>
+            <a href="main_screen.html"><img src='img/home.png' id="home-button" /></a>
+            <button class="mode-button header-button first-header-button" id="text-mode-button"><img src='img/textbox.png' style="width:100%;height:100%;" /></button>
+            <button class="mode-button header-button second-header-button" id="drawing-mode-button"><img src='img/draw.png' style="width:100%;height:100%;" /></button>
+            <span style="font-size:2em;"><button class="quick-chat-button header-button third-header-button" id="quick-chat-button-1">Y</button></span>
+            <span style="font-size:2em;"><button class="quick-chat-button header-button fourth-header-button" id="quick-chat-button-2">N</button></span>
+            <span style="font-size:2em;"><button class="quick-chat-button header-button fifth-header-button" id="quick-chat-button-3">?</button></span>
+            <span style="font-size:2em;"><button class="quick-chat-button header-button sixth-header-button" id="quick-chat-button-4">!</button></span>
         </div>
     </div>
-    <canvas id="canvas" style="border:1px solid #000000;">
+    <canvas id="canvas">
         Sorry, your browser doesn't support the canvas element.
     </canvas>
     <textarea rows="4" cols="50" id="input-text" style='width:200px;height:1.5em;' name="test"></textarea>
