@@ -187,7 +187,7 @@ define(function(require) {
 			'border': '0px'
 		})
 		button.css({
-			'border': '3px solid #fff'
+			'border': '3px solid #000'
 		});
 		var output = $("#input-text");
 		output.css({
@@ -215,7 +215,7 @@ define(function(require) {
 				});
 			} else {
 				$(button).css({
-					'background-color': 'white'
+					'background-color': "#D8D8D8"
 				});
 			}
 		}
@@ -248,7 +248,7 @@ define(function(require) {
 				});
 			} else {
 				$(button).css({
-					'background-color': 'white'
+					'background-color': "#D8D8D8"
 				});
 			}
 		}

@@ -19,19 +19,6 @@ define(function() {
 		redraw();
 	}
 
-	function log(x){
-		var canvas = document.getElementById('canvas');
-		var ctx = canvas.getContext('2d');
-
-		var p1 = ctx.transformedPoint(0,0);
-		var p2 = ctx.transformedPoint(canvas.width,canvas.height);
-		ctx.clearRect(p1.x,p1.y,p2.x-p1.x,p2.y-p1.y);
-
-		ctx.font = "24px Verdana";
-		ctx.fillStyle = '#000000';
-		ctx.fillText(x,150,150);
-	}
-
 	function panTouchstart(evt) {
 		if (evt.touches.length == 1) {
 			document.body.style.mozUserSelect = document.body.style.webkitUserSelect = document.body.style.userSelect = 'none';
@@ -90,7 +77,6 @@ define(function() {
 		if (dragStart){
 			var pt = ctx.transformedPoint(lastX,lastY);
 			ctx.translate(pt.x-dragStart.x,pt.y-dragStart.y);
-			log(evt.type);
 		}
 	}
 
@@ -103,7 +89,6 @@ define(function() {
 			dragStart = null;
 			realDragStart = null;
 		}
-		log(evt.type);
 		if (!dragged) zoom(evt.shiftKey ? -1 : 1 );
 		return handled;
 	}
